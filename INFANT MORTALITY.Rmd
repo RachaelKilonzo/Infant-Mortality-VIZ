@@ -1,0 +1,66 @@
+---
+title: "du bois"
+output: html_document
+date: "2024-07-03"
+---
+
+
+```{r}
+
+# Load the necessary libraries
+library(tidyverse)
+library(showtext)
+
+# Enable showtext and add Google fonts
+showtext_auto()
+font_add_google("Bai Jamjuree")
+font_add_google("Chakra Petch")
+font1 = "Bai Jamjuree"
+font2 = "Chakra Petch"
+
+
+```
+
+
+
+
+```{r}
+
+# Read mortality rate data
+kenya_mortality = read_csv('C:/Users/PC/Desktop/Portfolio/du bois/data.csv')
+
+# Wrangling: Compute RateNeg
+kenya_mortality = kenya_mortality %>%
+  mutate(RateNeg = infant_death * -1)
+
+
+ggplot(kenya_mortality) + 
+  geom_bar(aes(x = RateNeg, y = infant_death), stat = "identity", width = 1.5, fill = "#300000") +
+  geom_segment(aes(x = -188, xend = RateNeg + 0.04, y = infant_death , yend = infant_death),  size = 2.5,  lineend = "round", color = "black") +
+  geom_segment(aes(x = -188, xend = RateNeg + 0.04, y = infant_death , yend = infant_death),  size = 1.5,  lineend = "round", color = "#D9CAB3") +
+  geom_text(aes(label = date, x = -200, y = infant_death), size = 10, family = font1) +
+  scale_y_continuous(limits = c(0,200)) +
+  scale_x_continuous(breaks = kenya_mortality$RateNeg, labels = paste(kenya_mortality$infant_death), limits = c(-220, - 10)) +
+  theme_void() +
+   ggtitle("INFANT MORTALITY IN KENYA.") +
+  labs(caption = "Inspired by: Blake Robert Mills & W.E.B. Du Bois | Data: Statista | Plot : Rachael Ndindi Kilonzo") +
+  theme(plot.title = element_text(face = "bold", hjust = 0, size = 80, family = font2),
+       plot.background = element_rect(fill = "#D9CAB3", color = "#D9CAB3"),
+       plot.margin = margin(1.5, 1.5, 0.5, 0.5, "cm"),
+       axis.text.x = element_text(size = 20, family = font1, vjust = 0, angle = 90, hjust = 0),
+       plot.caption = element_text(family = font2, size = 20, hjust = 0, vjust = 0, face = "bold")) + 
+  annotate(geom = "text", label = "Deaths per \n1000 live \nbirths", x = -205, y = 0, lineheight = 0.5, size = 8, family = font1)
+
+
+
+# Save the plot
+ggsave("C:/Users/PC/Desktop/Portfolio/du bois/DuBois.png", width = 6, height = 10)
+
+                                                 
+```
+
+
+
+
+
+
